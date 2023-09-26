@@ -2,15 +2,19 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+/**
+ * @method static Builder withEmail(string $email)
+ */
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens,
         HasFactory,
@@ -26,7 +30,6 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
     ];
 
     /**
@@ -48,4 +51,29 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    public function scopeWithEmail(Builder $query, string $email): Builder
+    {
+        return $query->where('email', $email);
+    }
 }

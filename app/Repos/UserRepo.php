@@ -1,14 +1,18 @@
 <?php
 
+namespace App\Repos;
+
+use App\Events\UserCreatedEvent;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
+use App\Support\Role;
 
 class UserRepo extends BaseRepo
 {
-    protected static string $model = User::class;
+    protected static readonly string $model = User::class;
 
-    public function afterCreate(Model $model): void 
+    protected function afterCreate(User $user): void
     {
-        dispatch(new UserCreatedEvent($model));
+        $this->switchRole($user, Role::USER);
+        dispatch(new UserCreatedEvent($user));
     }
 }
