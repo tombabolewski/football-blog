@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Exceptions\InternalServerErrorHttpException;
-use App\Http\Requests\UpdateImageRequest;
+use App\Http\Controllers\Controller;
 use App\Models\Image;
 use App\Repos\ImageRepo;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
  * @see \App\Http\Controllers\Web\ImageController for store and show actions
@@ -18,7 +17,7 @@ class ImageController extends Controller
 {
     public function __construct(private ImageRepo $imageRepo)
     {
-        $this->authorizeResource(Post::class, 'post');
+        $this->authorizeResource(Image::class, 'image');
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Image extends Model
@@ -27,7 +28,17 @@ class Image extends Model
         return storage_path($this->path);
     }
 
+    public function getUrlAttribute(): string
+    {
+        return route('web.image.show', $this->id);
+    }
+
     // Relationships
+
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class);
+    }
 
     public function imageable(): MorphTo
     {

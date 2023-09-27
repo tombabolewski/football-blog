@@ -63,7 +63,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $updateUserRequest, User $user)
     {
-        $user = $this->userRepo->update($updateUserRequest->validated());
+        $user = $this->userRepo->update($user, $updateUserRequest->validated());
         $userResource = new UserResource($user);
         return response()->json($userResource, Response::HTTP_CREATED);
     }

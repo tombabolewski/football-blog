@@ -46,7 +46,7 @@ class AuthenticationController extends Controller
         } catch (ModelNotFoundException $e) {
             throw new UnauthorizedHttpException('jwt-auth', 'Wrong e-mail or password', $e, 1010);
         }
-        if ($user->can(Permission::USER_LOGIN->value)) {
+        if ($user->can(Permission::USER_LOGIN->value) === false) {
             throw new AccessDeniedHttpException('You are not allowed to login', null, 1020);
         }
         $token = auth()->attempt($credentials);

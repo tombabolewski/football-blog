@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('extension', 10);
             $table->string('mime_type');
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained()
-                ->cascadeOnDelete();
+                ->nullOnDelete();
             $table->foreignId('imageable_id');
             $table->string('imageable_type');
         });

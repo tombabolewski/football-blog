@@ -37,20 +37,8 @@ class UserCreatedNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage())
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
-    {
-        return [
-            //
-        ];
+                    ->line('Hello ' . $this->user->name . '!')
+                    ->line('Thank you for registering to our blog!')
+                    ->line('Please wait for our admin to approve your account before you can log in.');
     }
 }

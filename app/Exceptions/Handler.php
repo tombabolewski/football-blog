@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -25,16 +26,6 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->renderable(function (Throwable $e, Request $request) {
-            if ($request->is('api/*')) {
-                return response()->json([
-                    'error' => [
-                        'message' => 'Whoops! Something went wrong.',
-                        'code' => $e->getCode(),
-                    ],
-                ], 500);
-            }
-        });
         $this->renderable(function (HttpExceptionInterface $e, Request $request) {
             if ($request->is('api/*')) {
                 return response()->json([
@@ -44,6 +35,27 @@ class Handler extends ExceptionHandler
                     ],
                 ], $e->getStatusCode())
                 ->withHeaders($e->getHeaders());
+            }
+        });
+        $this->renderable(function (ValidationException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'error' => [
+                        'message' => 'Validation error. Please check your input and try again.',
+                        'fields' => $e->errors(),
+                        'code' => $e->getCode(),
+                    ],
+                ], 422);
+            }
+        });
+        $this->renderable(function (Throwable $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'error' => [
+                        'message' => 'Whoops! Something went wrong.',
+                        'code' => $e->getCode(),
+                    ],
+                ], 500);
             }
         });
     }

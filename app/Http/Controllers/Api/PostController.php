@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\InternalServerErrorHttpException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\IndexPostsRequest;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use App\Models\User;
 use App\Repos\PostRepo;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class PostController extends Controller
 {
@@ -25,7 +28,7 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(IndexPostsRequest $indexPostsRequest)
+    public function index(IndexPostsRequest $indexPostsRequest): AnonymousResourceCollection
     {
         $quantity = $indexPostsRequest->input('per_page', static::DEFAULT_POSTS_QUANTITY);
         $orderBy = $indexPostsRequest->input('order_by', static::DEFAULT_INDEX_ORDER_FIELD);
@@ -39,7 +42,10 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        $post = $this->postRepo->create($request->validated());
+        /** @var User $user */
+        $user = auth()->user();
+        $post = $this->postRepo->createForUser($request->validated(), $user);
+        return response()->json(PostResource::make($post), Response::HTTP_CREATED);
     }
 
     /**
@@ -47,7 +53,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return response()->json(PostResource::make($post));
     }
 
     /**
@@ -55,7 +61,8 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-        //
+        $post = $this->postRepo->update($post, $request->validated());
+        return response()->json(PostResource::make($post));
     }
 
     /**
@@ -63,6 +70,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $isDeleted = $this->postRepo->delete($post);
+        if ($isDeleted === false) {
+            throw new InternalServerErrorHttpException('Unable to delete the resource');
+        }
+        return response()->json(['message' => 'Post deleted successfully']);
     }
 }

@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Repos;
 
 use App\Exceptions\ClassIsNotInstanceOfModelException;
+use App\Exceptions\WrongModelInstanceException;
 use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseRepo
@@ -12,17 +11,14 @@ abstract class BaseRepo
     /**
      * @var class-string<Model> $model Model class
      */
-    protected abstract static readonly string $modelClass;
+    protected static string $modelClass;
 
     public function create(array $properties): Model
     {
-        $modelClass = static::$modelClass;
-        if (is_subclass_of($modelClass, Model::class) === false) {
-            throw new ClassIsNotInstanceOfModelException("{$modelClass} class is not instance of Model");
-        }
-
+        $this->beforeAction();
+        $this->beforeCreate($properties);
         /** @var Model */
-        $model = new $modelClass();
+        $model = new static::$modelClass();
         foreach ($properties as $key => $value) {
             $model->$key = $value;
         }
@@ -31,8 +27,22 @@ abstract class BaseRepo
         return $model->fresh();
     }
 
-    public function delete(Model $model): bool
+    public function update($model, array $properties): Model
     {
+        $this->beforeAction();
+        $this->beforeUpdate($model, $properties);
+        foreach ($properties as $key => $value) {
+            $model->$key = $value;
+        }
+        $model->save();
+        $this->afterUpdate($model);
+        return $model->fresh();
+    }
+
+    public function delete($model): bool
+    {
+        $this->beforeAction();
+        $this->beforeDelete($model);
         if ($model->delete()) {
             $this->afterDelete($model);
             return true;
@@ -40,13 +50,45 @@ abstract class BaseRepo
         return false;
     }
 
-    protected function afterCreate(Model $model): void
+    protected function checkModelClass(): void
     {
-        // May be implemented in child class
+        $modelClass = static::$modelClass;
+        if (is_subclass_of($modelClass, Model::class) === false) {
+            throw new ClassIsNotInstanceOfModelException("{$modelClass} class is not instance of Model");
+        }
     }
 
-    protected function afterDelete(Model $model): void
+    protected function checkModel($model): void
     {
-        // May be implemented in child class
+        $modelClass = static::$modelClass;
+        if ($model instanceof $modelClass === false) {
+            throw new WrongModelInstanceException("Model is not instance of {$modelClass}");
+        }
+    }
+
+    protected function beforeAction(): void
+    {
+        $this->checkModelClass();
+    }
+
+    protected function beforeCreate(array $properties): void
+    {
+    }
+    protected function afterCreate($model): void
+    {
+    }
+    protected function beforeUpdate($model, array $properties): void
+    {
+        $this->checkModel($model);
+    }
+    protected function afterUpdate($model): void
+    {
+    }
+    protected function beforeDelete($model): void
+    {
+        $this->checkModel($model);
+    }
+    protected function afterDelete($model): void
+    {
     }
 }

@@ -19,7 +19,7 @@ class UserPolicy
         return $user->id === auth()->user()->id;
     }
 
-    public function login(User|null $user): bool 
+    public function login(User|null $user): bool
     {
         // Make sure the user is not already logged in;
         // We check for user permission to login later on
@@ -27,18 +27,18 @@ class UserPolicy
         return empty($subject);
     }
 
-    public function logout(User $user): bool 
+    public function logout(User $user): bool
     {
         return $user->id === auth()->user()->id;
     }
 
     // Admin functionalities
-    public function viewAny(User $user): bool 
+    public function viewAny(User $user): bool
     {
         return $user->can(Permission::USER_VIEW_ANY);
     }
 
-    public function view(User $user): bool 
+    public function view(User $user): bool
     {
         return $user->can(Permission::USER_VIEW);
     }
@@ -48,12 +48,12 @@ class UserPolicy
         return $user->can(Permission::USER_CREATE);
     }
 
-    public function update(User $user): bool 
+    public function update(User $user): bool
     {
         return $user->can(Permission::USER_UPDATE);
     }
 
-    public function delete(User $user): bool 
+    public function delete(User $user): bool
     {
         return $user->can(Permission::USER_DELETE);
     }

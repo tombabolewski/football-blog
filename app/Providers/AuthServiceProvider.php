@@ -13,6 +13,6 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Implicitly grant Admin role all permissions
-        Gate::before(fn ($user, $ability) => $user->hasRole(Role::ADMIN) ? true : null);
+        Gate::before(fn ($user, $ability) => $user->hasRole(Role::ADMIN->value) ? true : null);
     }
 }

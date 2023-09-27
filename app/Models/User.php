@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Support\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -37,6 +39,13 @@ class User extends Authenticatable implements JWTSubject
         'password' => 'hashed',
     ];
 
+    // Attributes
+
+    public function getRoleAttribute(): Role
+    {
+        return Role::from($this->roles->first()->name);
+    }
+
     // Authentication
 
     /**
@@ -64,5 +73,17 @@ class User extends Authenticatable implements JWTSubject
     public function scopeWithEmail(Builder $query, string $email): Builder
     {
         return $query->where('email', $email);
+    }
+
+    // Relationships
+
+    public function posts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class);
+    }
+
+    public function images(): BelongsToMany
+    {
+        return $this->belongsToMany(Image::class);
     }
 }

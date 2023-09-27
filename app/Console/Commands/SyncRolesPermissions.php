@@ -10,7 +10,7 @@ use App\Support\Role;
 
 class SyncRolesPermissions extends Command
 {
-    protected $signature = 'permissions:sync';
+    protected $signature = 'permission:sync';
 
     protected $description = 'Sync user roles with permissions';
 
@@ -21,7 +21,7 @@ class SyncRolesPermissions extends Command
                 if (!($role = Role::tryFrom($roleModel->name))) {
                     return;
                 }
-                $roleModel->syncPermissions($role->getPermissions());
+                $roleModel->syncPermissions($role->getPermissionsValues());
             }
         );
     }
