@@ -31,7 +31,7 @@ class ImageController extends Controller
             'imageable_type' => $storeImageRequest->input('imageable_type', null),
             'imageable_id' => $storeImageRequest->input('imageable_id', null),
         ]);
-        dd($upload->storeAs($image->path, $image->filename));
+        $upload->storeAs($image->path, $image->filename);
     }
 
     /**
