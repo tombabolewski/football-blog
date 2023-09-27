@@ -12,17 +12,17 @@ abstract class BaseRepo
     /**
      * @var class-string<Model> $model Model class
      */
-    protected static string $modelClass;
+    protected abstract static readonly string $modelClass;
 
-    public function create(array $properties): Model 
+    public function create(array $properties): Model
     {
         $modelClass = static::$modelClass;
         if (is_subclass_of($modelClass, Model::class) === false) {
             throw new ClassIsNotInstanceOfModelException("{$modelClass} class is not instance of Model");
         }
-        
+
         /** @var Model */
-        $model = new static::$modelClass;
+        $model = new $modelClass();
         foreach ($properties as $key => $value) {
             $model->$key = $value;
         }
@@ -31,7 +31,21 @@ abstract class BaseRepo
         return $model->fresh();
     }
 
+    public function delete(Model $model): bool
+    {
+        if ($model->delete()) {
+            $this->afterDelete($model);
+            return true;
+        }
+        return false;
+    }
+
     protected function afterCreate(Model $model): void
+    {
+        // May be implemented in child class
+    }
+
+    protected function afterDelete(Model $model): void
     {
         // May be implemented in child class
     }

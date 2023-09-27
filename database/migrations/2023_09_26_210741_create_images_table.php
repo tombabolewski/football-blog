@@ -12,12 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('images', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->timestamps();
-            $table->string('filename');
             $table->string('extension', 10);
-            $table->string('model_class');
-            $table->foreignId('model_id');
+            $table->string('mime_type');
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
+            $table->foreignId('imageable_id');
+            $table->string('imageable_type');
         });
     }
 

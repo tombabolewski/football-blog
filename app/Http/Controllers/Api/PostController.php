@@ -39,7 +39,7 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        //
+        $post = $this->postRepo->create($request->validated());
     }
 
     /**

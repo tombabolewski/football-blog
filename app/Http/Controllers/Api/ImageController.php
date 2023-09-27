@@ -1,59 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreImageRequest;
+use App\Exceptions\InternalServerErrorHttpException;
 use App\Http\Requests\UpdateImageRequest;
 use App\Models\Image;
+use App\Repos\ImageRepo;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
+/**
+ * @see \App\Http\Controllers\Web\ImageController for store and show actions
+ */
 class ImageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(private ImageRepo $imageRepo)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreImageRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Image $image)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Image $image)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateImageRequest $request, Image $image)
-    {
-        //
+        $this->authorizeResource(Post::class, 'post');
     }
 
     /**
@@ -61,6 +26,10 @@ class ImageController extends Controller
      */
     public function destroy(Image $image)
     {
-        //
+        $isDeleted = $this->imageRepo->delete($image) && Storage::delete($image->path);
+        if ($isDeleted === false) {
+            throw new InternalServerErrorHttpException('Unable to delete image');
+        }
+        return response()->json(['message' => 'Image deleted successfully']);
     }
 }

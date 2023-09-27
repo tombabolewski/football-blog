@@ -12,7 +12,7 @@ class UserRepo extends BaseRepo
 
     protected function afterCreate(User $user): void
     {
-        $this->switchRole($user, Role::USER);
+        $user->syncRoles(Role::USER->value);
         dispatch(new UserCreatedEvent($user));
     }
 }
