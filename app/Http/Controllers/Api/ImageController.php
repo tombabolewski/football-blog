@@ -32,6 +32,7 @@ class ImageController extends Controller
             'imageable_id' => $storeImageRequest->input('imageable_id', null),
         ]);
         $upload->storeAs($image->path, $image->filename);
+        return response()->json(['message' => 'Image stored successfully']);
     }
 
     /**

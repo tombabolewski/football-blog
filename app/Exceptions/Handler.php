@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -48,7 +50,28 @@ class Handler extends ExceptionHandler
                 ], 422);
             }
         });
+        $this->renderable(function (AuthenticationException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'error' => [
+                        'message' => 'Unauthenticated',
+                        'code' => $e->getCode(),
+                    ],
+                ], 401);
+            }
+        });
+        $this->renderable(function (ModelNotFoundException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'error' => [
+                        'message' => 'Requested resource not found',
+                        'code' => $e->getCode(),
+                    ],
+                ], 404);
+            }
+        });
         $this->renderable(function (Throwable $e, Request $request) {
+            dd($e);
             if ($request->is('api/*')) {
                 return response()->json([
                     'error' => [

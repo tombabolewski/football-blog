@@ -45,7 +45,7 @@ class PostController extends Controller
         /** @var User $user */
         $user = auth()->user();
         $post = $this->postRepo->createForUser($request->validated(), $user);
-        return response()->json(PostResource::make($post), Response::HTTP_CREATED);
+        return response()->json(PostResource::make($post->loadMissing('images')), Response::HTTP_CREATED);
     }
 
     /**
@@ -53,7 +53,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return response()->json(PostResource::make($post));
+        return response()->json(PostResource::make($post->loadMissing('images')));
     }
 
     /**
