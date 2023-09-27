@@ -21,6 +21,11 @@ class ImageController extends Controller
         $this->authorizeResource(Image::class, 'image');
     }
 
+    /**
+     * Notice!
+     * In order to attach image to an imageable entity, e.g. Post, pass the full class name as `imageable_type`
+     * e.g. "App\Models\Post" and its id as `imageable_id`
+     */
     public function store(StoreImageRequest $storeImageRequest)
     {
         /** @var \Illuminate\Http\UploadedFile $upload */

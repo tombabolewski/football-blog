@@ -19,6 +19,7 @@
 
 1. Problem z czasem i/lub ambicjami - zaproponowany deadline jest zbyt krótki jak na załozenia, jakie przed sobą postawiłem
 1. Problem ze środowiskiem programistycznym - wygasła mi licencja na PhpStorm, do którego jestem przyzwyczajony i musiałem szybko przesiąśc się na VSCodium
+1. Relacja polimorficzna, której robic nie musiałem, ale chciałem :D Trochę się na niej poślizgnąłem
 
 ## Które części uważasz że można by lepiej dopracować gdybyś miał/a więcej czasu?
 
