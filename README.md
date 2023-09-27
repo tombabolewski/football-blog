@@ -12,6 +12,7 @@
 1. Dodanie ról i uprawnień przypisanych do nich
 1. Dodanie migracji, modelu `Post` i funkcjonalności oraz innych klas z nim związanych
 1. Dodanie migracji, modelu `Image` i funkcjonalności oraz innych klas z nim związanych
+1. Error handling
 1. Rozpoczęcie pokrycia kodu testami i poprawki w trakcie testowania
 
 ## Z jakimi częściami miałeś /miałaś problem i dlaczego?
@@ -29,3 +30,4 @@
 1. Rozwinąłbym obsługę błędów i ujednolicenie zwrotek
 1. Dopracowałbym role i uprawnienia
 1. Dodałbym event logi i dodał integrację z serwisem typu Sentry/Bugsnag
+1. Wymusiłbym połączenie po HTTPS i zrobił audyt bezpieczeństwa

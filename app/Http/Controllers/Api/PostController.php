@@ -30,10 +30,10 @@ class PostController extends Controller
      */
     public function index(IndexPostsRequest $indexPostsRequest): AnonymousResourceCollection
     {
-        $quantity = $indexPostsRequest->input('per_page', static::DEFAULT_POSTS_QUANTITY);
+        $quantity = $indexPostsRequest->input('per_page', static::DEFAULT_INDEX_QUANTITY);
         $orderBy = $indexPostsRequest->input('order_by', static::DEFAULT_INDEX_ORDER_FIELD);
         $orderDesc = $indexPostsRequest->input('order_desc', static::DEFAULT_INDEX_ORDER_DESC);
-        $posts = Post::query()->orderBy($orderBy, $orderDesc)->paginate($quantity);
+        $posts = Post::query()->orderBy($orderBy, $orderDesc ? 'desc' : 'asc')->paginate($quantity);
         return PostResource::collection($posts);
     }
 
