@@ -45,7 +45,7 @@ class ImageController extends Controller
      */
     public function destroy(Image $image)
     {
-        $isDeleted = $this->imageRepo->delete($image) && Storage::delete($image->path);
+        $isDeleted = $this->imageRepo->delete($image) && Storage::delete($image->path . '/app/' . $image->filename);
         if ($isDeleted === false) {
             throw new InternalServerErrorHttpException('Unable to delete image');
         }
