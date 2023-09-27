@@ -14,7 +14,7 @@ class ImagePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Image $image): bool
+    public function view(User|null $user, Image $image): bool
     {
         return true;
     }
