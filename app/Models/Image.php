@@ -43,12 +43,12 @@ class Image extends Model
 
     public function getPathAttribute(): string
     {
-        return "app/images-uploads/{$this->id}.{$this->extension}";
+        return 'images-uploads';
     }
 
-    public function getStoragePathAttribute(): string
+    public function getFilenameAttribute(): string
     {
-        return storage_path($this->path);
+        return "{$this->id}.{$this->extension}";
     }
 
     public function getUrlAttribute(): string
