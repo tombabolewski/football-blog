@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Exceptions\InternalServerErrorHttpException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreImageRequest;
 use App\Models\Image;
 use App\Repos\ImageRepo;
 use Illuminate\Support\Facades\Storage;
@@ -18,6 +19,17 @@ class ImageController extends Controller
     public function __construct(private ImageRepo $imageRepo)
     {
         $this->authorizeResource(Image::class, 'image');
+    }
+
+    public function store(StoreImageRequest $storeImageRequest)
+    {
+        $image = $this->imageRepo->create([
+            'extension' => $storeImageRequest->image->extension(),
+            'mime_type' => $storeImageRequest->image->mimeType(),
+            'imageable_type' => $storeImageRequest->input('imageable_type', null),
+            'imageable_id' => $storeImageRequest->input('imageable_id', null),
+        ]);
+        $storeImageRequest->image->move($image->storage_path);
     }
 
     /**

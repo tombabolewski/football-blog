@@ -16,17 +16,6 @@ class ImageController extends Controller
         $this->authorizeResource(Image::class, 'image');
     }
 
-    public function store(StoreImageRequest $storeImageRequest)
-    {
-        $image = $this->imageRepo->create([
-            'extension' => $storeImageRequest->image->extension(),
-            'mime_type' => $storeImageRequest->image->mimeType(),
-            'imageable_type' => $storeImageRequest->input('imageable_type', null),
-            'imageable_id' => $storeImageRequest->input('imageable_id', null),
-        ]);
-        $storeImageRequest->image->move($image->storage_path);
-    }
-
     public function show(Image $image)
     {
         return response()->file($image->storage_path, ['Content-Type' => $image->mime_type]);

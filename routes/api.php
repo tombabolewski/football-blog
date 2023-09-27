@@ -35,6 +35,6 @@ Route::middleware('api')->name('api.')
 
             Route::apiResource('user', UserController::class);
             Route::apiResource('post', PostController::class);
-            Route::apiResource('image', ImageController::class)->only(['destroy']);
+            Route::apiResource('image', ImageController::class)->only(['destroy', 'store']);
         });
     });

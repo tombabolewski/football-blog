@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware(['web'])->group(function () {
+    Route::get('/image/{image}', [App\Http\Controllers\Web\ImageController::class, 'show'])->name('web.image.show');
 });
