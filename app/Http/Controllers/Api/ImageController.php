@@ -30,6 +30,8 @@ class ImageController extends Controller
     {
         /** @var \Illuminate\Http\UploadedFile $upload */
         $upload = $storeImageRequest->image;
+        // @todo: Check if class of imageable_type exists and is an instance of Model
+        // @todo: Check if record of imageable_id and imageable_type exists
         $image = $this->imageRepo->create([
             'extension' => $upload->extension(),
             'mime_type' => $upload->getMimeType(),
