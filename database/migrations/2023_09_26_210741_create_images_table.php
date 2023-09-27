@@ -20,8 +20,10 @@ return new class extends Migration
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();
-            $table->foreignId('imageable_id');
-            $table->string('imageable_type');
+            $table->foreignId('imageable_id')
+                ->nullable();
+            $table->string('imageable_type')
+                ->nullable();
         });
     }
 

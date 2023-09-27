@@ -23,9 +23,11 @@ class ImageController extends Controller
 
     public function store(StoreImageRequest $storeImageRequest)
     {
+        /** @var \Illuminate\Http\UploadedFile $upload */
+        $upload = $storeImageRequest->image;
         $image = $this->imageRepo->create([
-            'extension' => $storeImageRequest->image->extension(),
-            'mime_type' => $storeImageRequest->image->mimeType(),
+            'extension' => $upload->extension(),
+            'mime_type' => $upload->getMimeType(),
             'imageable_type' => $storeImageRequest->input('imageable_type', null),
             'imageable_id' => $storeImageRequest->input('imageable_id', null),
         ]);
