@@ -51,6 +51,11 @@ class Image extends Model
         return "{$this->id}.{$this->extension}";
     }
 
+    public function getStoragePathAttribute(): string
+    {
+        return storage_path('app/' . $this->path . '/' . $this->filename);
+    }
+
     public function getUrlAttribute(): string
     {
         return route('web.image.show', $this->id);
