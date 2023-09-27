@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Models\Image;
 use App\Models\User;
+use App\Support\Permission;
 use Illuminate\Auth\Access\Response;
 
 class ImagePolicy
@@ -13,7 +16,7 @@ class ImagePolicy
      */
     public function view(User $user, Image $image): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -21,15 +24,7 @@ class ImagePolicy
      */
     public function create(User $user): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Image $image): bool
-    {
-        //
+        return $user->can(Permission::IMAGE_CREATE->value);
     }
 
     /**
@@ -37,22 +32,6 @@ class ImagePolicy
      */
     public function delete(User $user, Image $image): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Image $image): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Image $image): bool
-    {
-        //
+        return $user->can(Permission::IMAGE_DELETE->value);
     }
 }

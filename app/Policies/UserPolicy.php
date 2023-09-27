@@ -35,26 +35,26 @@ class UserPolicy
     // Admin functionalities
     public function viewAny(User $user): bool
     {
-        return $user->can(Permission::USER_VIEW_ANY);
+        return $user->can(Permission::USER_VIEW_ANY->value);
     }
 
     public function view(User $user): bool
     {
-        return $user->can(Permission::USER_VIEW);
+        return $user->can(Permission::USER_VIEW->value);
     }
 
     public function create(User $user): bool
     {
-        return $user->can(Permission::USER_CREATE);
+        return $user->can(Permission::USER_CREATE->value);
     }
 
     public function update(User $user): bool
     {
-        return $user->can(Permission::USER_UPDATE);
+        return $user->can(Permission::USER_UPDATE->value);
     }
 
     public function delete(User $user): bool
     {
-        return $user->can(Permission::USER_DELETE);
+        return $user->can(Permission::USER_DELETE->value);
     }
 }

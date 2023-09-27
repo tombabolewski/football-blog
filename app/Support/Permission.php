@@ -21,4 +21,8 @@ enum Permission: string
     case POST_CREATE = 'post.create';
     case POST_UPDATE = 'post.update';
     case POST_DELETE = 'post.delete';
+
+    case IMAGE_SHOW = 'image.show';
+    case IMAGE_CREATE = 'image.create';
+    case IMAGE_DELETE = 'image.delete';
 }

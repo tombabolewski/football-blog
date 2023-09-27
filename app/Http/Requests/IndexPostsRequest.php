@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -14,7 +16,10 @@ class IndexPostsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'per_page' => 'integer|min:1',
+            'page' => 'integer|min:1',
+            'order_by' => 'string|min:1',
+            'order_desc' => 'boolean',
         ];
     }
 }

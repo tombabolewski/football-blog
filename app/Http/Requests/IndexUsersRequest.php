@@ -1,19 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 class IndexUsersRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return false;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -22,7 +16,10 @@ class IndexUsersRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'per_page' => 'integer|min:1',
+            'page' => 'integer|min:1',
+            'order_by' => 'string|min:1',
+            'order_desc' => 'boolean',
         ];
     }
 }
