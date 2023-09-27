@@ -71,7 +71,6 @@ class Handler extends ExceptionHandler
             }
         });
         $this->renderable(function (Throwable $e, Request $request) {
-            dd($e);
             if ($request->is('api/*')) {
                 return response()->json([
                     'error' => [
